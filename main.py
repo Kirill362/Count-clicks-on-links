@@ -1,7 +1,15 @@
 import requests
+from dotenv import load_dotenv
 import os
+import argparse
 
 
+parser = argparse.ArgumentParser(description='При вводе полной ссылки - создаёт битли ссылку, при вводе битли ссылки - выводит кол-во переходов по ней')
+parser.add_argument('url', help='Ваша ссылка')
+args = parser.parse_args()
+
+
+load_dotenv()
 API_BITLY_TOKEN = os.getenv("API_BITLY_TOKEN")
 
 
@@ -22,11 +30,11 @@ def count_clicks(url, token):
 
 
 if __name__ == '__main__':
-  your_url = input()
+  your_url = args.url
   try:
     if your_url.startswith("http"):
       print(create_bitlink(your_url, API_BITLY_TOKEN))
     else:
-      print(count_clicks(your_url, API_BITLY_TOKEN))
+      print(f"Количество переходов по ссылке битли: {count_clicks(your_url, API_BITLY_TOKEN)}")
   except requests.exceptions.HTTPError:
     print("Ошибка: ваша ссылка не работает")
